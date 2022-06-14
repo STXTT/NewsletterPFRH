@@ -18,20 +18,22 @@ const [date,setDate] = useState(null);
 
 
 //permet de recuperer les formations et les stocker dans le cache
-const{isLoading, data} =useQuery("formations", () => GetFormations(url))
+const {isLoading, data} =useQuery("formations", () => GetFormations(url));
+
+
 
 
   return (
     <>
-     Formations publié après le : <DatePicker value={date} onChange={setDate} prevLabel={"choisir une date"}/>
-     date picked : {date?.toDateString()}
+     Formations publié après le :   <DatePicker value={date} onChange={setDate} prevLabel={"choisir une date"}/>
+     
     {/* lorsque la requete à fini de charger on parcours chaque item pour l'afficher */         } 
      {!isLoading && date ? data.map((formation) => {
         
-        if (formation.date_published >= date)
-            return(<div onClick={()=>setSelectedFormation(formation)}>
+        if (formatDate(formation.date_published) >= date)
+            return(<div key={formation.guid}  onClick={()=>setSelectedFormation(formation)}>
               
-             <Formation  key={formation.guid} formation={formation}/>
+             <Formation  formation={formation}/>
              </div>
             )
      })
@@ -52,6 +54,20 @@ const GetFormations= async (url)=> {
       description: el.querySelector("description").innerHTML,
       date_published: el.querySelector("pubDate").innerHTML,
       guid: el.querySelector("guid").innerHTML,
+      domain: el.querySelector("description").innerHTML.slice(
+        el.querySelector("description").innerHTML.indexOf("Domaine :</strong><br />")+24,
+        el.querySelector("description").innerHTML.indexOf("</p>")
+      ),
+      date : el.querySelector("description").innerHTML.slice(
+        el.querySelector("description").innerHTML.indexOf("Date : </strong>")+16,
+        el.querySelector("description").innerHTML.indexOf("Date : </strong>")+26
+       
+      ),
+      address: el.querySelector("description").innerHTML.slice(
+        el.querySelector("description").innerHTML.indexOf("Lieu : </strong>")+16,
+        el.querySelector("description").innerHTML.indexOf("Statut :")
+      ),
+
     }));
     return feedItems;
 
@@ -63,13 +79,8 @@ const GetFormations= async (url)=> {
 //permet de passer de la date du flux rss à un objet Date JS
 
 const formatDate = (date) =>{
-    var year = date.slice(0,4);
-    var month = date.slice(5,7);
-    var day = date.slice(8,10);
-    
-    
 
-    var formatedDate = new Date(year,month-1,day)
+    var formatedDate = new Date(date)
     
 
     return formatedDate;
