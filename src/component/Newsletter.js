@@ -21,7 +21,7 @@ useEffect(()=>{
 
 
 
-<ButtonMailto label="Envoyer" mailto={"mailto:no-reply@example.com?html-body="+value+outro+"&subject=Fçormations à venir sur safire"} />
+<ButtonMailto label="Envoyer" mailto={"mailto:no-reply@example.com?html-body="+value+outro+"&subject=Formations à venir sur safire"} />
 
 
 </div>
