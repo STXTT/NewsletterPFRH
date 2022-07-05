@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-date-picker";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import Formation from "./Formation";
+import { Switch } from "@mui/material";
 
 
 
@@ -12,6 +13,8 @@ const Formations = ({setSelectedFormation}) => {
 const url = useState("http://api.allorigins.win/get?url=https://grand-est.safire.fonction-publique.gouv.fr/web/grand-est/51-rss.php?idRegion=1")
 
 const [date,setDate] = useState(null);
+const [selectedMode, setSelectedMode] = useState(false)
+
 
 
 
@@ -25,18 +28,38 @@ const {isLoading, data} =useQuery("formations", () => GetFormations(url));
 
   return (
     <>
-     Formations publié après le :   <DatePicker value={date} onChange={setDate} prevLabel={"choisir une date"}/>
+     {!selectedMode ? "Formations publié après le :" : "Formations ayant lieu avant le"}   <DatePicker value={date} onChange={setDate} />
+     <Switch checked={selectedMode} onChange={()=>{
+      setSelectedMode(!selectedMode);
+      setDate(null);
+      }} inputProps={{ 'aria-label': 'controlled' }}/>
+     
      
     {/* lorsque la requete à fini de charger on parcours chaque item pour l'afficher */         } 
      {!isLoading && date ? data.map((formation) => {
-        
-        if (formatDate(formation.date_published) >= date)
+      if(!selectedMode){
+        if (formatDate(formation.date_published) >= date){
             return(<div key={formation.guid}  onClick={()=>setSelectedFormation(formation)}>
               
              <Formation  formation={formation}/>
              </div>
             )
-     })
+        }
+      }
+      else {
+        var actualDate = new Date();
+        if(!formation.date.includes("<p"))
+        if (formatDate2(formation.date) <= date && formatDate2(formation.date) > actualDate ){
+          return(<div key={formation.guid}  onClick={()=>setSelectedFormation(formation)}>
+            
+           <Formation  formation={formation}/>
+           </div>
+          )
+      }
+      }
+          })
+        
+
      :null} 
     </>)
 };
@@ -59,13 +82,13 @@ const GetFormations= async (url)=> {
         el.querySelector("description").innerHTML.indexOf("</p>")
       ),
       date : el.querySelector("description").innerHTML.slice(
-        el.querySelector("description").innerHTML.indexOf("Date : </strong>")+16,
-        el.querySelector("description").innerHTML.indexOf("Date : </strong>")+26
+        el.querySelector("description").innerHTML.lastIndexOf("Date : </strong>")+16,
+        el.querySelector("description").innerHTML.lastIndexOf("Date : </strong>")+26
        
       ),
       address: el.querySelector("description").innerHTML.slice(
-        el.querySelector("description").innerHTML.indexOf("Lieu : </strong>")+16,
-        el.querySelector("description").innerHTML.indexOf("Statut :")
+        el.querySelector("description").innerHTML.lastIndexOf("Lieu : </strong>")+16,
+        el.querySelector("description").innerHTML.lastIndexOf("Statut :")
       ),
 
     }));
@@ -84,5 +107,17 @@ const formatDate = (date) =>{
     
 
     return formatedDate;
+}
+
+const formatDate2 = (date) =>{
+
+  var formatedDate = new Date;
+  formatedDate.setDate(date.slice(0,2))
+  formatedDate.setMonth(date.slice(3,5))
+  formatedDate.setFullYear(date.slice(6,10))
+  
+  
+
+  return formatedDate;
 }
 export default Formations;

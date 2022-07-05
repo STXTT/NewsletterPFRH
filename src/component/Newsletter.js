@@ -1,5 +1,4 @@
 import React,{useEffect, useState} from "react";
-import Formation from "./Formation";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ButtonMailto from "./ButtonMailto";
@@ -14,7 +13,7 @@ const Newsletter = ({selectedFormation}) => {
 
   //A chaque fois que l'utilisateur choisi une formation elle est ajouté à la suite du contenu de value.
 useEffect(()=>{
-  setValue(value+"<strong><br/><p>"+selectedFormation?.title+"</strong> : "+selectedFormation?.domain+"<br/>Date : "+selectedFormation?.date+" Lieu : "+selectedFormation?.address+`<a href=${selectedFormation?.link.slice(0,selectedFormation?.link.lastIndexOf("&"))}>Voir sur Safire</a></p>`)
+  setValue(value+"<strong><br/><p>"+selectedFormation?.title+"</strong> : "+"Date : "+selectedFormation?.date+" Lieu : "+selectedFormation?.address+`<a href=${selectedFormation?.link.slice(0,selectedFormation?.link.lastIndexOf("&"))}>Voir sur Safire</a></p>`)
 },[selectedFormation])
 
     return(
@@ -25,7 +24,7 @@ useEffect(()=>{
 
 
 
-<ButtonMailto label="Envoyer" mailto={"mailto:no-reply@example.com?html-body="+value+outro+"&subject=Formations à venir sur safire"} />
+<ButtonMailto label="Envoyer" mailto={"mailto:?html-body="+value.replaceAll('&nbsp;', ' ')+outro+"&subject=Formations à venir sur safire"} />
 
 
 </div>
