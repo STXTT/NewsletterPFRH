@@ -12,10 +12,10 @@ const Home = () => {
     <>
      <h1 style={{textAlign:"center"}}>Bienvenue sur l'outil de newsletter de la PFRH Grand Est</h1>
      <section style={{display:"flex", marginLeft:"10%", marginRight:"5%"}}>
-     <div style={{border : "2px solid grey", height:"700px", width:"30%", margin:"5px",textAlign:"center",overflow:"auto"}}>
+     <div style={{border : "2px solid grey", height:"720px", width:"30%", margin:"5px",textAlign:"center",overflow:"auto"}}>
          <Formations setSelectedFormation={setSelectedFormation}/>
      </div>
-     <div style={{border : "2px solid grey", height:"700px", width:"60%", margin:"5px",textAlign:"center",overflow:"auto"}}>
+     <div style={{border : "2px solid grey", height:"720px", width:"70%", margin:"5px",textAlign:"center",overflow:"hidden"}}>
        <Newsletter selectedFormation={selectedFormation}/>
      </div>
      </section>

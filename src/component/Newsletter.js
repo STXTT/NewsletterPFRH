@@ -1,33 +1,49 @@
-import React,{useEffect, useState} from "react";
+import React,{useEffect, useState, useRef } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ButtonMailto from "./ButtonMailto";
-import 'react-quill/dist/quill.snow.css';
+import EmailEditor from 'react-email-editor';
+import template from './template.json'
+import { Button } from "@mui/material";
 
 
-const Newsletter = ({selectedFormation}) => {
-  //variable contenant le code html du mail, initialisé avec un message d'introduction
-  const [value, setValue] = useState('<p>Bonjour,<br/>La PFRH vous informe des formations suivantes. </p>');
-  
-  var outro = "Merci par avance d'en assurer la diffusion <br/> Bien cordialement,"
+const Newsletter = ({}) => {
+  const emailEditorRef = useRef(null);
 
-  //A chaque fois que l'utilisateur choisi une formation elle est ajouté à la suite du contenu de value.
-useEffect(()=>{
-  setValue(value+"<strong><br/><p>"+selectedFormation?.title+"</strong> : "+"Date : "+selectedFormation?.date+" Lieu : "+selectedFormation?.address+`<a href=${selectedFormation?.link.slice(0,selectedFormation?.link.lastIndexOf("&"))}>Voir sur Safire</a></p>`)
-},[selectedFormation])
+  const exportHtml = () => {
+    emailEditorRef.current.editor.exportHtml((data) => {
+      const { design, html } = data;
+      console.log('exportHtml', html);
+      navigator.clipboard.writeText(html)
+      window.location.href = "mailto:"
+    });
+  };
 
-    return(
-<div>
-  
-{//ReactQuill est un éditeur pour reactJS
-<ReactQuill style={{marginTop : "-5%"}} theme="snow" value={value} onChange={setValue}/>}
+  const onLoad = () => {
+    // editor instance is created
+    // you can load your template here;
+    // const templateJson = {};
+     emailEditorRef.current.editor.loadDesign(template);
+  }
 
+  const onReady = () => {
+    // editor is ready
+    console.log('onReady');
+  };
 
-
-<ButtonMailto label="Envoyer" mailto={"mailto:?html-body="+value.replaceAll('&nbsp;', ' ')+outro+"&subject=Formations à venir sur safire"} />
-
-
-</div>
-    )
-}
+  return (
+    <div>
+      <div>
+        <Button onClick={exportHtml}>Export HTML</Button>
+      </div>
+      
+      <EmailEditor
+        ref={emailEditorRef}
+        onLoad={onLoad}
+        onReady={onReady}
+        minHeight={700}
+      />
+    </div>
+  );
+};
 export default Newsletter;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-date-picker";
 import { useQuery } from "react-query";
 import Formation from "./Formation";
@@ -14,10 +14,25 @@ const url = useState("http://api.allorigins.win/get?url=https://grand-est.safire
 
 const [date,setDate] = useState(null);
 const [selectedMode, setSelectedMode] = useState(false)
+const [selectedFormations, setSelectedFormations] = useState([])
+const [htmlFormations, setHtmlFormations] = useState("")
 
+const handleFormationclick = (formation) =>{
+  setSelectedFormation(formation);
+  setSelectedFormations(oldArray => [...oldArray,formation]);
+  setHtmlFormations(htmlFormations+`<div><p>`+formation.title+" "+formation.date+"<br/>"+formation.address.replaceAll("<strong>","")+"</p>"+`<a href="${formation.link.replaceAll("&amp;","&")}">`+"voir sur safire"+"</a></div>");
 
+}
 
+useEffect(()=>{
+  navigator.clipboard.writeText(htmlFormations);
 
+},[htmlFormations])
+
+useEffect(()=>{
+  setHtmlFormations("")
+
+},[selectedMode])
 
 
 //permet de recuperer les formations et les stocker dans le cache
@@ -39,9 +54,9 @@ const {isLoading, data} =useQuery("formations", () => GetFormations(url));
      {!isLoading && date ? data.map((formation) => {
       if(!selectedMode){
         if (formatDate(formation.date_published) >= date){
-            return(<div key={formation.guid}  onClick={()=>setSelectedFormation(formation)}>
+            return(<div key={formation.guid}  onClick={()=>handleFormationclick(formation)}>
               
-             <Formation  formation={formation}/>
+             <Formation selected={selectedFormations.includes(formation)} formation={formation}/>
              </div>
             )
         }
@@ -50,9 +65,9 @@ const {isLoading, data} =useQuery("formations", () => GetFormations(url));
         var actualDate = new Date();
         if(!formation.date.includes("<p"))
         if (formatDate2(formation.date) <= date && formatDate2(formation.date) > actualDate ){
-          return(<div key={formation.guid}  onClick={()=>setSelectedFormation(formation)}>
+          return(<div key={formation.guid}  onClick={()=>handleFormationclick(formation)}>
             
-           <Formation  formation={formation}/>
+           <Formation selected={selectedFormations.includes(formation)}  formation={formation}/>
            </div>
           )
       }
