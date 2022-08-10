@@ -7,20 +7,20 @@ import { Switch } from "@mui/material";
 
 
 
-const Formations = ({setSelectedFormation}) => {
+const Formations = ({setSelectedFormation, selectedMode}) => {
 
 //url du flux rss, passé par toptal afin de récupérer un objet json directement
-const url = useState("http://api.allorigins.win/get?url=https://grand-est.safire.fonction-publique.gouv.fr/web/grand-est/51-rss.php?idRegion=1")
+const [url,setUrl] = useState("http://api.allorigins.win/get?url=https://grand-est.safire.fonction-publique.gouv.fr/web/grand-est/51-rss.php?idRegion=1")
 
 const [date,setDate] = useState(null);
-const [selectedMode, setSelectedMode] = useState(false)
+const [selectedModeDate, setselectedModeDate] = useState(true)
 const [selectedFormations, setSelectedFormations] = useState([])
 const [htmlFormations, setHtmlFormations] = useState("")
 
 const handleFormationclick = (formation) =>{
   setSelectedFormation(formation);
   setSelectedFormations(oldArray => [...oldArray,formation]);
-  setHtmlFormations(htmlFormations+`<div><p>`+formation.title+" "+formation.date+"<br/>"+formation.address.replaceAll("<strong>","")+"</p>"+`<a href="${formation.link.replaceAll("&amp;","&")}">`+"voir sur safire"+"</a></div>");
+  setHtmlFormations(htmlFormations+`<div><p><strong>`+formation.title+"</strong><br/> Débute le : "+formation.date+"<br/>"+formation.address.replaceAll("<strong>","")+"</p>"+`<a href="${formation.link.replaceAll("&amp;","&")}">`+"Voir sur safire"+"</a></div><br/>");
 
 }
 
@@ -32,7 +32,8 @@ useEffect(()=>{
 useEffect(()=>{
   setHtmlFormations("")
 
-},[selectedMode])
+},[selectedModeDate])
+
 
 
 //permet de recuperer les formations et les stocker dans le cache
@@ -43,20 +44,20 @@ const {isLoading, data} =useQuery("formations", () => GetFormations(url));
 
   return (
     <>
-     {!selectedMode ? "Formations publié après le :" : "Formations ayant lieu avant le"}   <DatePicker value={date} onChange={setDate} />
-     <Switch checked={selectedMode} onChange={()=>{
-      setSelectedMode(!selectedMode);
+     {!selectedModeDate ? "Formations publié après le :" : "Formations ayant lieu avant le :"}   <DatePicker value={date} onChange={setDate} />
+     <Switch checked={selectedModeDate} onChange={()=>{
+      setselectedModeDate(!selectedModeDate);
       setDate(null);
       }} inputProps={{ 'aria-label': 'controlled' }}/>
      
      
     {/* lorsque la requete à fini de charger on parcours chaque item pour l'afficher */         } 
-     {!isLoading && date ? data.map((formation) => {
-      if(!selectedMode){
+     {!isLoading && date ?data.map((formation) => {
+      if(!selectedModeDate){
         if (formatDate(formation.date_published) >= date){
             return(<div key={formation.guid}  onClick={()=>handleFormationclick(formation)}>
               
-             <Formation selected={selectedFormations.includes(formation)} formation={formation}/>
+             <Formation selectedMode={selectedMode} selected={selectedFormations.includes(formation)} formation={formation}/>
              </div>
             )
         }

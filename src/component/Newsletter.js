@@ -4,11 +4,14 @@ import 'react-quill/dist/quill.snow.css';
 import ButtonMailto from "./ButtonMailto";
 import EmailEditor from 'react-email-editor';
 import template from './template.json'
-import { Button } from "@mui/material";
+import templateDRF from './templateDRF.json'
+import { Button,Switch } from "@mui/material";
 
 
-const Newsletter = ({}) => {
+const Newsletter = ({selectedMode,setSelectedMode}) => {
   const emailEditorRef = useRef(null);
+  const [isReady,setIsReady]=useState(false);
+
 
   const exportHtml = () => {
     emailEditorRef.current.editor.exportHtml((data) => {
@@ -16,6 +19,7 @@ const Newsletter = ({}) => {
       console.log('exportHtml', html);
       navigator.clipboard.writeText(html)
       window.location.href = "mailto:"
+
     });
   };
 
@@ -29,12 +33,24 @@ const Newsletter = ({}) => {
   const onReady = () => {
     // editor is ready
     console.log('onReady');
+    setIsReady(true)
   };
 
   return (
     <div>
       <div>
+
         <Button onClick={exportHtml}>Export HTML</Button>
+
+        Thème :
+        <Switch checked={selectedMode} onChange={()=>{
+      setSelectedMode(!selectedMode);
+      !selectedMode ? emailEditorRef.current.editor.loadDesign(template)
+      :      emailEditorRef.current.editor.loadDesign(templateDRF);
+
+
+      }} inputProps={{ 'aria-label': 'controlled' }}/>
+        
       </div>
       
       <EmailEditor
