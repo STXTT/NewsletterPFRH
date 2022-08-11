@@ -25,6 +25,7 @@ const handleFormationclick = (formation) =>{
 }
 
 useEffect(()=>{
+  if(htmlFormations !="")
   navigator.clipboard.writeText(htmlFormations);
 
 },[htmlFormations])
