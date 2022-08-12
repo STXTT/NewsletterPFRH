@@ -69,7 +69,7 @@ const {isLoading, data} =useQuery("formations", () => GetFormations(url));
         if (formatDate2(formation.date) <= date && formatDate2(formation.date) > actualDate ){
           return(<div key={formation.guid}  onClick={()=>handleFormationclick(formation)}>
             
-           <Formation selected={selectedFormations.includes(formation)}  formation={formation}/>
+           <Formation selectedMode={selectedMode} selected={selectedFormations.includes(formation)}  formation={formation}/>
            </div>
           )
       }
