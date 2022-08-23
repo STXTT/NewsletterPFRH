@@ -17,7 +17,7 @@ if(!selectedMode && formation.domain.includes("intérieur")){
   
   else return null;
 }
-if(selectedMode){
+if(selectedMode && !formation.domain.includes("intérieur")){
   //Si les caractères de la date sont la balise <p> c'est qu'il n'y a pas de date, la formation à donc été férmé et ne doit pas être affiché
   if(!formation.date.includes("<p>")){
     return(
