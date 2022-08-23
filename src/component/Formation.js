@@ -2,7 +2,9 @@ import React from "react";
 
 // Ce composant permet de gérer l'affichage d'une formation 
 const Formation = ({selected, formation, selectedMode}) => {
+
 if(!selectedMode && formation.domain.includes("intérieur")){
+  
   //Si les caractères de la date sont la balise <p> c'est qu'il n'y a pas de date, la formation à donc été férmé et ne doit pas être affiché
   if(!formation.date.includes("<p>")){
     return(

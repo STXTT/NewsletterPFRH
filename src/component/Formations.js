@@ -68,7 +68,6 @@ const {isLoading, data} =useQuery("formations", () => GetFormations(url));
         if(!formation.date.includes("<p"))
         if (formatDate2(formation.date) <= date && formatDate2(formation.date) > actualDate ){
           return(<div key={formation.guid}  onClick={()=>handleFormationclick(formation)}>
-            
            <Formation selectedMode={selectedMode} selected={selectedFormations.includes(formation)}  formation={formation}/>
            </div>
           )
@@ -130,9 +129,8 @@ const formatDate2 = (date) =>{
 
   var formatedDate = new Date;
   formatedDate.setDate(date.slice(0,2))
-  formatedDate.setMonth(date.slice(3,5))
+  formatedDate.setMonth(date.slice(3,5)-1)
   formatedDate.setFullYear(date.slice(6,10))
-  
   
 
   return formatedDate;
