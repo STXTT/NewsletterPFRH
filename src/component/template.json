@@ -552,7 +552,7 @@
                     "id": "-0OukdSLTy",
                     "type": "text",
                     "values": {
-                        "containerPadding": "33px 55px 60px",
+                        "containerPadding": "10px 55px 5px",
                         "anchor": "",
                         "textAlign": "center",
                         "lineHeight": "160%",
@@ -624,7 +624,7 @@
                     "id": "mpbwLRND0y",
                     "type": "text",
                     "values": {
-                        "containerPadding": "41px 55px 18px",
+                        "containerPadding": "5px 55px 10px",
                         "anchor": "",
                         "color": "#003399",
                         "textAlign": "center",
