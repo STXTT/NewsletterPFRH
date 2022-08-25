@@ -647,7 +647,7 @@
                         "duplicatable": true,
                         "deletable": true,
                         "hideable": true,
-                        "text": "<p style=\"font-size: 14px; line-height: 160%;\"><span style=\"font-size: 20px; line-height: 32px;\"><strong>Le service formation interministérielle<br /></strong></span></p>\n<p style=\"font-size: 14px; line-height: 160%;\"><span style=\"font-size: 16px; line-height: 25.6px; color: #000000;\">pfrh-formation-interministerielle@grand-est.gouv.fr</span></p>",
+                        "text": "<p style=\"font-size: 14px; line-height: 160%;\"><span style=\"font-size: 20px; line-height: 32px;\"><strong>Le service régional de formation<br /></strong></span></p>\n<p style=\"font-size: 14px; line-height: 160%;\"><span style=\"font-size: 20px; line-height: 32px;\"><strong>PFRH-SGARE</strong></span></p>\n<p style=\"font-size: 14px; line-height: 160%;\"><span style=\"font-size: 16px; line-height: 25.6px; color: #000000;\">pfrh-srf@grand-est.gouv.fr</span></p>",
                         "hideMobile": false
                     }
                 }],
